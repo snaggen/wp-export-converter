@@ -1,5 +1,8 @@
 package com.github.snaggen;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.time.OffsetDateTime;
@@ -15,6 +18,23 @@ import org.eclipse.persistence.oxm.annotations.XmlPath;
 @XmlRootElement(name="rss")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WpExport {
+	
+	public static WpExport fromFile(String exportXmlFile) throws IOException, MarshallingException {
+		if (exportXmlFile == null) {
+			return null;
+		}
+		File file = new File(exportXmlFile);
+		FileInputStream fis = new FileInputStream(file);
+		byte[] data = new byte[(int) file.length()];
+		fis.read(data);
+		fis.close();
+
+		String xml = new String(data, "UTF-8");
+		
+		WpExportMarshaller marshaller = new WpExportMarshaller();
+		return marshaller.unmarshal(xml);
+	}		
+	
     @XmlPath("channel/title/text()")
     private String blogTitle;
 
@@ -77,6 +97,9 @@ public class WpExport {
 		@XmlPath("wp:post_id/text()")
 		private Integer id;
 
+		@XmlPath("wp:post_type/text()")
+		private String type;
+
 		@XmlPath("wp:post_parent/text()")
 		private Integer parentId;
 
@@ -93,6 +116,19 @@ public class WpExport {
 		@XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
 		private OffsetDateTime published;
 		
+		public WpExportItem() {
+		}
+		
+		public WpExportItem(WpExportItem wpExportItem) {
+			this.title = wpExportItem.title;
+			this.id = wpExportItem.id;
+			this.parentId = wpExportItem.parentId;
+			this.content = wpExportItem.content;
+			this.attachmentUri = wpExportItem.attachmentUri;
+			this.author = wpExportItem.author;
+			this.published = wpExportItem.published;
+		}
+
 		public String getTitle() {
 			return title;
 		}
@@ -147,6 +183,18 @@ public class WpExport {
 
 		public void setAttachmentUri(URL attachmentUri) {
 			this.attachmentUri = attachmentUri;
+		}
+
+		public WpExportItem copy() {
+			return new WpExportItem(this);
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
 		}
 		
 	}

@@ -34,14 +34,18 @@ public class CommandODF {
 	@Parameter(names = { "-v", "--verbose"}, description = "Verbose output", required = false)
 	private final boolean verbose = false;
 
-	@Parameter(description = "Export File", required = true)
+	@Parameter(names = { "-f", "--export-xml"}, description = "Export xml file", required = true)
+	private final String exportXmlFile = null;
+	
+	
+	@Parameter(description = "Output ODF File, defaults to output.odf in current working directory", required = false)
 	private List<String> files;
 
 	public void perform() throws Exception {
-		File file = new File(files.get(0));
-		String outfile = "/tmp/output.odf";
-		if (files.size() >= 2) {
-			outfile = files.get(1);
+		File file = new File(exportXmlFile);
+		String outfile = "./output.odf";
+		if (files != null && files.size() >= 1) {
+			outfile = files.get(0);
 		}
 		FileInputStream fis = new FileInputStream(file);
 		byte[] data = new byte[(int) file.length()];

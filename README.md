@@ -24,12 +24,13 @@ This could be made prettier by using a simple wrapper script, but remember that 
 
 ## Extracting texts
 ```sh
-java -jar target/wp-export-converter-0.0.1-SNAPSHOT-jar-with-dependencies.jar toOdf ~/blog-export-file.xml /tmp/output.odf
+java -jar target/wp-export-converter-0.0.1-SNAPSHOT-jar-with-dependencies.jar toOdf -f ~/blog-export-file.xml /tmp/output.odf
 ```
 
 ## Fetching media
+It seems that wordpress exports doesn't include links to the files for gallery with ids explicitly specified, like mosaik collages. ie [gallery ids="111,112,113" type="type="rectangular"]. However, they are included in the media export file. So to handle this you can send in an additional media xml file parameter. 
 ```sh
-java -jar target/wp-export-converter-0.0.1-SNAPSHOT-jar-with-dependencies.jar fetchMedia ~/blog-export-file.xml ~/BlogMediaFiles
+java -jar target/wp-export-converter-0.0.1-SNAPSHOT-jar-with-dependencies.jar fetchMedia -f ~/blog-export-file.xml -m ~/media-export.xml ~/BlogMediaFiles
 ```
 
 ## License
