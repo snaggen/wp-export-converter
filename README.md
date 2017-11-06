@@ -8,7 +8,7 @@ I created this tool for my own use, since I wanted to try to convert my existing
 
 # Limitations
 
-The actual parsing of the blog post content, is a little limited. Only simple strong and em tags har currently handelded. 
+The actual parsing of the blog post content, is a little limited. Only simple strong and em tags are currently handelded. 
 
 # Building
 
